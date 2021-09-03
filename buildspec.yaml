@@ -1,0 +1,34 @@
+version: 0.2
+
+env:
+  variables:
+    NODE_ENV: "${env}"
+
+  parameter-store:
+    REACT_APP_MAP_LEAFLET_KEY: REACT_APP_MAP_LEAFLET_KEY
+    REACT_APP_MAP_BOX_STYLE_ID: REACT_APP_MAP_BOX_STYLE_ID
+
+  exported-variables:
+    - REACT_APP_MAP_LEAFLET_KEY
+    - REACT_APP_MAP_BOX_STYLE_ID
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 14
+    commands:
+      - echo installing . . .
+      - yarn install      
+  build:
+    commands:
+      - echo Starting build . . .
+      - yarn run build
+artifacts:
+  files:
+    - '**/*'
+  name: "web-dist-$(date +%Y-%m-%d)"
+  base-directory: build
+
+cache:
+  paths:
+    - /root/.npm/**/*
