@@ -1,8 +1,62 @@
-# Getting Started with Create React App
+# Inter Prison Transfers Aotearoa
+
+
 
 
 https://bobheadxi.dev/maps-and-shenanigans/
 
+
+
+From,To,Transfer Date
+
+# Reason For Transfer
+
+|Transfer Reason                | Count |
+|------------------------------|------|
+|Population Management         | 8835 |
+|Judicial                      | 6850 |
+|Placement Review              | 3060 |
+|Accepted for Programme        | 3050 |
+|Placement Management          | 1991 |
+|Release                       | 1522 |
+|Personal Request              | 1291 |
+|In Transit/Multi-Site Move    | 832 |
+|Medical                       | 354 |
+
+
+# Status At Transfer
+
+|Status At Transfer                 |Count |
+|-----------------------------------|------|
+|Remand - Accused                   | 11037|
+|Remand - Convicted                 | 3666|
+|Sentenced                          | 3604|
+|Sentenced (High)                   | 2774|
+|Sentenced (Low Medium)             | 2362|
+|Sentenced (Low)                    | 1935|
+|Sentenced (Minimum)                | 1636|
+|Recall Outstanding                 |  334|
+|Sentenced (Maximum)                | 261|
+|In Transit                         |   73|
+|Recall Outstanding (Minimum)       |    8|
+|Recall Outstanding (Low)           |    4|
+|Low Medium                         |    2|
+|Unclassified                       |    2|
+|Recall Outstanding (High)          |    2|
+|(Low)                              |    2|
+|(Low Medium)                       |    1|
+|Aa (Aa)                            |    1|
+|Low                                |    1|
+|Recall Outstanding (Low Medium)    |    1|
+|Escaped                            |    1|
+|(Bb)                               |    1|
+|(High)                             |    1|
+|Remand - Accused (Low Medium)      |    1|
+|Minimum                            |    1|
+|(Maximum)                          |    1|
+
+
+# Tech Stuff
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
@@ -32,43 +86,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
