@@ -1,10 +1,49 @@
-# Inter Prison Transfers Aotearoa
+# Inter Prison Transfers in Aotearoa/New Zealand
+
+## FOIA - Inter-Prison Transfers Across Time and Place
 
 
 
+https://fyi.org.nz/request/16105-inter-prison-transfers-across-time-and-place#outgoing-27826
+
+
+https://www.corrections.govt.nz/resources/policy_and_legislation/Prison-Operations-Manual/Movement/M.04-External-movement-transportation-of-prisoners/M.04.03-Inter-prison-transfers
+
+
+
+```
+    Population Pressure - Adviser Prison Population only
+        For muster management purpose
+        To separate different categories of prisoners
+    Judicial - RO staff, PCO of the unit or Board Liaison Officers
+        For Judicial purposes
+        The transfer is pursuant to section 143 of the Sentencing Act 2002
+    Medical - Health staff
+        to provide Health care
+    Placement Management - Prison Director, Residential Manager or  PCO
+        to ensure the safety of that prisoner or any other reason
+        to reduce the risk of suicide or self-harm
+        transfer has been directed by the Chief Executive or an Inspector
+        to restore or maintain security and order of the prison
+    Personal Request - PCO
+        prisoner request transfer
+    Accepted for Programme - PCO or delegate from the destination unit
+        for reintegration / rehabilitation purposes
+        to address offender plan activities
+    Release - PCO or RO staff
+        to be close to home region
+    Placement Review - PCO
+        to assist in likelihood of reducing re-offending
+        due to change in security classification
+        to allow for repairs or alterations at the prison
+```
+
+
+2 July 2018 and 22 July 2021
+
+over 27,000 transfers
 
 https://bobheadxi.dev/maps-and-shenanigans/
-
 
 
 From,To,Transfer Date
@@ -54,6 +93,32 @@ From,To,Transfer Date
 |Remand - Accused (Low Medium)      |    1|
 |Minimum                            |    1|
 |(Maximum)                          |    1|
+
+
+
+Covid 
+
+Alert Level 4 - 26 March 2020 - 28 April 2020
+
+23 March 2020	Negative increase 3
+26 March 2020	Negative increase 4
+28 April 2020	Positive decrease 3
+14 May 2020	Positive decrease 2
+9 June 2020	Positive decrease 1
+
+https://covid19.govt.nz/alert-levels-and-updates/history-of-the-covid-19-alert-system/
+
+
+370 total
+
+Population Management    189
+Release                   62
+Placement Review          49
+Judicial                  37
+Placement Management      25
+Medical                    5
+Personal Request           3
+
 
 
 # Tech Stuff
