@@ -22,7 +22,7 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-*.json
+# *.json
 *.csv
 *.json.zip
 .env

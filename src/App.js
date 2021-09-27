@@ -13,9 +13,9 @@ const MAP_BOX_ACCESS_TOKEN = process.env.REACT_APP_MAP_LEAFLET_KEY
 const BLUE_RGB = [0, 0, 255, 40]
 const RED_RGB = [240, 100, 0, 40]
 
-const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
+// const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
 
-const url = cloudUrl + 'inter-prison-transfers.json'
+// const url = cloudUrl + 'inter-prison-transfers.json'
 
 const transitionInterpolator = new LinearInterpolator({
   transitionProps: ['bearing', 'zoom', 'pitch']
@@ -98,7 +98,7 @@ function App () {
     >
       <ArcLayer
         id='arc-layer'
-        data={url}
+        data={data}
         getSourcePosition={d => d.Transfer_From_Coordinates}
         getTargetPosition={d => d.Transfer_To_Coordinates}
         getSourceColor={RED_RGB}
