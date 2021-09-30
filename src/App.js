@@ -7,21 +7,26 @@ import { ArcLayer } from '@deck.gl/layers'
 import { GridLayer } from '@deck.gl/aggregation-layers'
 import { StaticMap } from 'react-map-gl'
 import { LinearInterpolator } from '@deck.gl/core'
+import mapboxgl from 'mapbox-gl';
 import data from './data/transfers.json'
 
 const MAP_BOX_ACCESS_TOKEN = process.env.REACT_APP_MAP_LEAFLET_KEY
 const BLUE_RGB = [0, 0, 255, 40]
 const RED_RGB = [240, 100, 0, 40]
 
-// const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
+const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
 
-// const url = cloudUrl + 'inter-prison-transfers.json'
+const url = cloudUrl + '/inter-prison-transfers.json'
 
 const transitionInterpolator = new LinearInterpolator({
   transitionProps: ['bearing', 'zoom', 'pitch']
 })
 // // auto_highlight: true
 // "From: {From} To: {To} Reason: {Reason} Transfer Date: {'Transfer Date'} Status At Transfer: {'Status At Transfer'} <br /> From in red; To in blue"
+
+
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default
 
 function App () {
   const [glContext, setGLContext] = useState()
@@ -98,7 +103,7 @@ function App () {
     >
       <ArcLayer
         id='arc-layer'
-        data={data}
+        data={url}
         getSourcePosition={d => d.Transfer_From_Coordinates}
         getTargetPosition={d => d.Transfer_To_Coordinates}
         getSourceColor={RED_RGB}
