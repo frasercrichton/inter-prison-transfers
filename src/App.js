@@ -16,7 +16,7 @@ const RED_RGB = [240, 100, 0, 40]
 
 const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
 
-const url = cloudUrl + '/inter-prison-transfers.json'
+const url = cloudUrl + 'inter-prison-transfers.json'
 
 const transitionInterpolator = new LinearInterpolator({
   transitionProps: ['bearing', 'zoom', 'pitch']
