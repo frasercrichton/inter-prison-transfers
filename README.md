@@ -151,3 +151,8 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+
+REACT_APP_MAP_LEAFLET_KEY
+REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
+
+https://observablehq.com/@pessimistress/deck-gl-tutorial-subclassing-a-layer

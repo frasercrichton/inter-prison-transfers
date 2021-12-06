@@ -8,12 +8,10 @@ import { GridLayer } from '@deck.gl/aggregation-layers'
 import { StaticMap } from 'react-map-gl'
 import { LinearInterpolator } from '@deck.gl/core'
 import mapboxgl from 'mapbox-gl';
-import data from './data/transfers.json'
 
-const MAP_BOX_ACCESS_TOKEN = process.env.REACT_APP_MAP_LEAFLET_KEY
 const BLUE_RGB = [0, 0, 255, 40]
 const RED_RGB = [240, 100, 0, 40]
-
+const MAP_BOX_ACCESS_TOKEN = process.env.REACT_APP_INTER_PRISON_TRANSFER_MAP_BOX_KEY
 const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
 
 const url = cloudUrl + 'inter-prison-transfers.json'
@@ -23,7 +21,7 @@ const transitionInterpolator = new LinearInterpolator({
 })
 // // auto_highlight: true
 // "From: {From} To: {To} Reason: {Reason} Transfer Date: {'Transfer Date'} Status At Transfer: {'Status At Transfer'} <br /> From in red; To in blue"
-
+const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';
 
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default
@@ -39,6 +37,7 @@ function App () {
     latitude: -41.7409396,
     pitch: 45,
     bearing: 0,
+  
     zoom: 4.0
   })
 
@@ -90,7 +89,7 @@ function App () {
 
   return (
     <DeckGL
-      getTooltip={tooltip}
+      // getTooltip={tooltip}
       ref={deckRef}
       controller
       initialViewState={viewState}
@@ -110,7 +109,7 @@ function App () {
         getTargetColor={BLUE_RGB}
         getWidth={1}
         getTilt={70}
-        onHover={setHoverInfo}
+        // onHover={setHoverInfo}
       />
       <StaticMap
         ref={mapRef}
