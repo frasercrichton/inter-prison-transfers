@@ -4,13 +4,13 @@ import DeckGL from '@deck.gl/react'
 import { TRANSITION_EVENTS } from 'deck.gl'
 import { MapboxLayer } from '@deck.gl/mapbox'
 import { ArcLayer } from '@deck.gl/layers'
-import { GridLayer } from '@deck.gl/aggregation-layers'
+import { GridLayer, HeatmapLayer } from '@deck.gl/aggregation-layers'
 import { StaticMap } from 'react-map-gl'
 import { LinearInterpolator } from '@deck.gl/core'
-import mapboxgl from 'mapbox-gl';
+import mapboxgl from 'mapbox-gl'
 
-const BLUE_RGB = [0, 0, 255, 40]
-const RED_RGB = [240, 100, 0, 40]
+const BLUE_RGB = [255, 255, 255, 40]
+const RED_RGB = [0, 0, 0, 40]
 const MAP_BOX_ACCESS_TOKEN = process.env.REACT_APP_INTER_PRISON_TRANSFER_MAP_BOX_KEY
 const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
 const url = cloudUrl + 'inter-prison-transfers.json'
@@ -121,12 +121,13 @@ function App() {
   const deckRef = useRef(null)
   const mapRef = useRef(null)
   const tooltip = ({ Object }) => ({ html: hoverInfo })
+  const zoom = 5.0
   const [viewState, setViewState] = useState({
     longitude: 173.5886324,
     latitude: -41.7409396,
     pitch: 45,
     bearing: 0,
-    zoom: 4.0
+    zoom
   })
 
   const rotateCamera = useCallback(() => {
@@ -134,7 +135,7 @@ function App() {
       {
         ...viewState,
         bearing: 30,
-        zoom: 5.0,
+        zoom,
         pitch: 90,
         transitionDuration: 7000,
         transitionInterpolator,
@@ -180,6 +181,7 @@ function App() {
       // getTooltip={tooltip}
       ref={deckRef}
       controller
+      mapStyle='https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
       initialViewState={viewState}
       onViewStateChange={onViewStateChange}
       onWebGLInitialized={setGLContext}
@@ -211,15 +213,24 @@ function App() {
         getSourceColor={RED_RGB}
         getFrequency={1.0}
         animationSpeed={0.001}
-        tailLength={1.0}
+        tailLength={0.5}
+      />
+      <HeatmapLayer
+        id='heatmapLayer'
+        data={url}
+        radiusPixels={800}
+        getPosition={d => d.Transfer_From_Coordinates}
+        getWeight={55}
+        aggregation={'SUM'}
+        colorRange={[[255, 255, 255], [0, 0, 0]]}
       />
 
-      <StaticMap
+      {/* <StaticMap
         ref={mapRef}
         gl={glContext}
-        mapboxApiAccessToken={MAP_BOX_ACCESS_TOKEN}
+        // mapboxApiAccessToken={MAP_BOX_ACCESS_TOKEN}
         onLoad={onMapLoad}
-      />
+      /> */}
       {/* <GridLayer
         id='grid-layer'
         data={url}
