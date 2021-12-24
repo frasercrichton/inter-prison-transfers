@@ -4,14 +4,12 @@ import DeckGL from '@deck.gl/react'
 import { TRANSITION_EVENTS } from 'deck.gl'
 import { MapboxLayer } from '@deck.gl/mapbox'
 import { ArcLayer } from '@deck.gl/layers'
-import { GridLayer, HeatmapLayer } from '@deck.gl/aggregation-layers'
-import { StaticMap } from 'react-map-gl'
+import { HeatmapLayer } from '@deck.gl/aggregation-layers'
 import { LinearInterpolator } from '@deck.gl/core'
 import mapboxgl from 'mapbox-gl'
 
 const BLUE_RGB = [255, 255, 255, 40]
 const RED_RGB = [0, 0, 0, 40]
-const MAP_BOX_ACCESS_TOKEN = process.env.REACT_APP_INTER_PRISON_TRANSFER_MAP_BOX_KEY
 const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
 const url = cloudUrl + 'inter-prison-transfers.json'
 
@@ -20,8 +18,6 @@ const transitionInterpolator = new LinearInterpolator({
 })
 // // auto_highlight: true
 // "From: {From} To: {To} Reason: {Reason} Transfer Date: {'Transfer Date'} Status At Transfer: {'Status At Transfer'} <br /> From in red; To in blue"
-const MAP_STYLE = 'https://basemaps.cartocdn.com/gl/positron-nolabels-gl-style/style.json';
-
 // eslint-disable-next-line import/no-webpack-loader-syntax
 mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default
 
@@ -190,18 +186,6 @@ function App() {
         stencil: true
       }}
     >
-      {/* <ArcLayer
-        id='arc-layer'
-        data={url}
-        getSourcePosition={d => d.Transfer_From_Coordinates}
-        getTargetPosition={d => d.Transfer_To_Coordinates}
-        getSourceColor={RED_RGB}
-        getTargetColor={BLUE_RGB}
-        getWidth={1}
-        getTilt={70}
-
-      // onHover={setHoverInfo}
-      /> */}
       <AnimatedArcLayer
         id={animatedId}
         data={url}
@@ -224,24 +208,6 @@ function App() {
         aggregation={'SUM'}
         colorRange={[[255, 255, 255], [0, 0, 0]]}
       />
-
-      {/* <StaticMap
-        ref={mapRef}
-        gl={glContext}
-        // mapboxApiAccessToken={MAP_BOX_ACCESS_TOKEN}
-        onLoad={onMapLoad}
-      /> */}
-      {/* <GridLayer
-        id='grid-layer'
-        data={url}
-        packable
-        extruded
-        cellSize={20000}
-        elevationScale={400}
-        getPosition={d => d.Transfer_From_Coordinates}
-        colorRange={[RED_RGB]}
-        opacity={1.0}
-      /> */}
     </DeckGL>
   )
 }
