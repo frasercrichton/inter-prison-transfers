@@ -10,8 +10,7 @@ import mapboxgl from 'mapbox-gl'
 
 const BLUE_RGB = [255, 255, 255, 40]
 const RED_RGB = [0, 0, 0, 40]
-const cloudUrl = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE
-const url = cloudUrl + 'inter-prison-transfers.json'
+const url = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE + 'inter-prison-transfers.json'
 
 const transitionInterpolator = new LinearInterpolator({
   transitionProps: ['bearing', 'zoom', 'pitch']
@@ -23,11 +22,21 @@ mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worke
 
 const defaultProps = {
   // Frequency of the running light
-  getFrequency: { type: 'accessor', value: 1 },
+  getFrequency: {
+    type: 'accessor',
+    value: 1
+  },
   // Speed of the running light
-  animationSpeed: { type: 'number', min: 0, value: 1 },
+  animationSpeed: {
+    type: 'number',
+    min: 0,
+    value: 1
+  },
   // Size of the blob
-  tailLength: { type: 'number', min: 0, value: 1 }
+  tailLength: {
+    type: 'number',
+    min: 0, value: 1
+  }
 }
 
 const vsDeclaration = `
@@ -130,9 +139,10 @@ function App() {
     setViewState((viewState) => (
       {
         ...viewState,
+
+        pitch: 90,
         bearing: 30,
         zoom,
-        pitch: 90,
         transitionDuration: 7000,
         transitionInterpolator,
         transitionInterruption: TRANSITION_EVENTS.BREAK
