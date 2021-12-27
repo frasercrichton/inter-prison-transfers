@@ -132,7 +132,9 @@ function App() {
     latitude: -41.7409396,
     pitch: 45,
     bearing: 0,
-    zoom
+    zoom,
+    minZoom: zoom,
+    maxZoom: zoom
   })
 
   const rotateCamera = useCallback(() => {
