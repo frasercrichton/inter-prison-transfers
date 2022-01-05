@@ -1,20 +1,31 @@
 import './App.css'
-import React, { useState, useRef, useCallback } from 'react'
+import React from 'react'
 import DeckGL from '@deck.gl/react'
-import { TRANSITION_EVENTS } from 'deck.gl'
-import { MapboxLayer } from '@deck.gl/mapbox'
 import { ArcLayer } from '@deck.gl/layers'
 import { HeatmapLayer } from '@deck.gl/aggregation-layers'
-import { LinearInterpolator } from '@deck.gl/core'
 import mapboxgl from 'mapbox-gl'
+import { StaticMap } from 'react-map-gl'
+import InfoPanel from './InfoPanel'
 
-const BLUE_RGB = [255, 255, 255, 40]
-const RED_RGB = [0, 0, 0, 40]
+const MAP_BOX_ACCESS_TOKEN = process.env.REACT_APP_INTER_PRISON_TRANSFER_MAP_BOX_KEY
+const MAP_BOX_STYLE_ID = process.env.REACT_APP_INTER_PRISON_TRANSFER_MAP_BOX_ID
+
+const DEFAULT_SOURCE_COLOUR = [0, 0, 0, 40]
+const POPULATION_SOURCE_COLOUR = [255, 0, 0, 40]
+
+const DEFAULT_TARGET_COLOUR = [255, 255, 255, 40]
+const POPULATION_TARGET_COLOUR = [255, 0, 0, 40]
+
+const getSourceColour = (item) => {
+  return (item.Reason === "Population Management") ? POPULATION_SOURCE_COLOUR : DEFAULT_SOURCE_COLOUR
+}
+
+const getTargetColour = (item) => {
+  return (item.Reason === "Population Management") ? POPULATION_TARGET_COLOUR : DEFAULT_TARGET_COLOUR
+}
+
 const url = process.env.REACT_APP_INTER_PRISON_TRANSFERS_CLOUD_STORAGE + 'inter-prison-transfers.json'
 
-const transitionInterpolator = new LinearInterpolator({
-  transitionProps: ['bearing', 'zoom', 'pitch']
-})
 // // auto_highlight: true
 // "From: {From} To: {To} Reason: {Reason} Transfer Date: {'Transfer Date'} Status At Transfer: {'Status At Transfer'} <br /> From in red; To in blue"
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -35,7 +46,7 @@ const defaultProps = {
   // Size of the blob
   tailLength: {
     type: 'number',
-    min: 0, value: 1
+    min: 0, value: 2
   }
 }
 
@@ -72,6 +83,14 @@ if (alpha == 0.0) {
 }
 color.a *= alpha;
 `
+const settings = {
+  touchZoom: false,
+  scrollWheelZoom: false,
+  touchRotate: false,
+  dragPan: false,
+  dragRotate: false,
+  scrollZoom: false,
+}
 
 class AnimatedArcLayer extends ArcLayer {
 
@@ -88,7 +107,6 @@ class AnimatedArcLayer extends ArcLayer {
   }
 
   draw(opts) {
-    console.log('drawing')
     this.state.model.setUniforms({
       tailLength: this.props.tailLength,
       animationSpeed: this.props.animationSpeed,
@@ -117,110 +135,61 @@ class AnimatedArcLayer extends ArcLayer {
 }
 AnimatedArcLayer.layerName = 'AnimatedArcLayer'
 AnimatedArcLayer.defaultProps = defaultProps
-const animatedId = 'arc-layer'
+
 //  + Date.now()
+const heatmapLayerColourRange = [
+  [255, 255, 255],
+  [0, 0, 0]
+]
+const zoom = 5.0
+const viewState = {
+  longitude: 173.5886324,
+  latitude: -41.7409396,
+  pitch: 45,
+  bearing: 0,
+  zoom,
+  minZoom: zoom,
+  maxZoom: zoom,
+  ...settings
+}
 
 function App() {
-  const [glContext, setGLContext] = useState()
-  const [hoverInfo, setHoverInfo] = useState()
-  const deckRef = useRef(null)
-  const mapRef = useRef(null)
-  const tooltip = ({ Object }) => ({ html: hoverInfo })
-  const zoom = 5.0
-  const [viewState, setViewState] = useState({
-    longitude: 173.5886324,
-    latitude: -41.7409396,
-    pitch: 45,
-    bearing: 0,
-    zoom,
-    minZoom: zoom,
-    maxZoom: zoom
-  })
-
-  const rotateCamera = useCallback(() => {
-    setViewState((viewState) => (
-      {
-        ...viewState,
-
-        pitch: 90,
-        bearing: 30,
-        zoom,
-        transitionDuration: 7000,
-        transitionInterpolator,
-        transitionInterruption: TRANSITION_EVENTS.BREAK
-      }))
-  }, [])
-
-  const onViewStateChange = useCallback(
-    ({ viewState, interactionState }) => {
-      const { isDragging, isPanning, isRotating, isZooming } = interactionState
-      if (isDragging || isPanning || isRotating || isZooming) {
-        setViewState((viewState) => ({
-          ...viewState,
-          transitionDuration: 0,
-          transitionInterpolator,
-          transitionInterruption: TRANSITION_EVENTS.BREAK
-        }))
-      }
-    },
-    []
-  )
-
-  const onMapLoad = useCallback(() => {
-    const map = mapRef.current.getMap()
-    const deck = deckRef.current.deck
-
-    const layers = map.getStyle().layers
-    const firstLabelLayerId = layers.find(
-      (layer) => layer.type === 'symbol'
-    ).id
-
-    map.addLayer(new MapboxLayer({ id: 'grid-layer', deck }), firstLabelLayerId)
-    map.addLayer(
-      new MapboxLayer({ id: 'arc-layer', deck }),
-      firstLabelLayerId
-    )
-
-    rotateCamera()
-  }, [rotateCamera])
 
   return (
-    <DeckGL
-      // getTooltip={tooltip}
-      ref={deckRef}
-      controller
-      mapStyle='https://basemaps.cartocdn.com/gl/positron-gl-style/style.json'
-      initialViewState={viewState}
-      onViewStateChange={onViewStateChange}
-      onWebGLInitialized={setGLContext}
-      glOptions={{
-        /* To render vector tile polygons correctly */
-        stencil: true
-      }}
-    >
-      <AnimatedArcLayer
-        id={animatedId}
-        data={url}
-        getSourcePosition={d => d.Transfer_From_Coordinates}
-        getTargetPosition={d => d.Transfer_To_Coordinates}
-        getWidth={2}
-        getTilt={90}
-        getTargetColor={BLUE_RGB}
-        getSourceColor={RED_RGB}
-        getFrequency={1.0}
-        animationSpeed={0.001}
-        tailLength={0.5}
-      />
-      <HeatmapLayer
-        id='heatmapLayer'
-        data={url}
-        radiusPixels={800}
-        getPosition={d => d.Transfer_From_Coordinates}
-        getWeight={55}
-        aggregation={'SUM'}
-        colorRange={[[255, 255, 255], [0, 0, 0]]}
-      />
-    </DeckGL>
+    <div>
+      <DeckGL
+        controller
+        initialViewState={viewState}
+      >
+        <StaticMap
+          mapboxApiAccessToken={MAP_BOX_ACCESS_TOKEN}
+          mapStyle={MAP_BOX_STYLE_ID}
+        />
+        <AnimatedArcLayer
+          id='arc-layer'
+          data={url}
+          getSourcePosition={d => d.Transfer_From_Coordinates}
+          getTargetPosition={d => d.Transfer_To_Coordinates}
+          getWidth={2}
+          getTilt={90}
+          getSourceColor={d => getSourceColour(d)}
+          getTargetColor={d => getTargetColour(d)}
+          getFrequency={1.0}
+          animationSpeed={0.001}
+          tailLength={0.5}
+        />
+        <HeatmapLayer
+          id='heatmapLayer'
+          data={url}
+          pickable={false}
+          radiusPixels={800}
+          getPosition={(d) => d.Transfer_From_Coordinates}
+          getWeight={(d) => 1}
+          colorRange={heatmapLayerColourRange}
+        />
+      </DeckGL>
+      <InfoPanel />
+    </div>
   )
 }
 // reuseMaps
