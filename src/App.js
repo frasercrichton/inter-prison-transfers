@@ -150,7 +150,6 @@ const viewState = {
   zoom,
   minZoom: zoom,
   maxZoom: zoom,
-  ...settings
 }
 
 const sourcePosition = (d) => {
@@ -162,7 +161,7 @@ function App() {
   return (
     <div>
       <DeckGL
-        controller
+        controller={{ ...settings }}
         initialViewState={viewState}
       >
         <StaticMap
@@ -188,7 +187,6 @@ function App() {
           pickable={false}
           radiusPixels={800}
           getPosition={(d) => d.Transfer_From_Coordinates}
-          // getWeight={(d) => d["Transfer Date"]}
           colorRange={heatmapLayerColourRange}
         />
       </DeckGL>
