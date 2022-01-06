@@ -153,8 +153,12 @@ const viewState = {
   ...settings
 }
 
-function App() {
+const sourcePosition = (d) => {
+  return d.Transfer_From_Coordinates
+}
+const targetPosition = d => d.Transfer_To_Coordinates
 
+function App() {
   return (
     <div>
       <DeckGL
@@ -168,12 +172,12 @@ function App() {
         <AnimatedArcLayer
           id='arc-layer'
           data={url}
-          getSourcePosition={d => d.Transfer_From_Coordinates}
-          getTargetPosition={d => d.Transfer_To_Coordinates}
           getWidth={2}
           getTilt={90}
-          getSourceColor={d => getSourceColour(d)}
-          getTargetColor={d => getTargetColour(d)}
+          getSourcePosition={sourcePosition}
+          getTargetPosition={targetPosition}
+          getSourceColor={getSourceColour}
+          getTargetColor={getTargetColour}
           getFrequency={1.0}
           animationSpeed={0.001}
           tailLength={0.5}
@@ -184,7 +188,7 @@ function App() {
           pickable={false}
           radiusPixels={800}
           getPosition={(d) => d.Transfer_From_Coordinates}
-          getWeight={(d) => 1}
+          // getWeight={(d) => d["Transfer Date"]}
           colorRange={heatmapLayerColourRange}
         />
       </DeckGL>
