@@ -1,20 +1,26 @@
 import './App.css'
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import DeckGL from '@deck.gl/react'
-import { ArcLayer } from '@deck.gl/layers'
-import { HeatmapLayer } from '@deck.gl/aggregation-layers'
+import { ArcLayer, ScatterplotLayer } from '@deck.gl/layers'
+import { JSONLoader } from '@loaders.gl/json'
+import { load } from '@loaders.gl/core'
 import mapboxgl from 'mapbox-gl'
 import { StaticMap } from 'react-map-gl'
 import InfoPanel from './InfoPanel'
 
+import counts from './inter-prison-transfers-counts.json'
+import populationcounts from './inter-prison-transfers-population-management-counts.json'
 const MAP_BOX_ACCESS_TOKEN = process.env.REACT_APP_INTER_PRISON_TRANSFER_MAP_BOX_KEY
 const MAP_BOX_STYLE_ID = process.env.REACT_APP_INTER_PRISON_TRANSFER_MAP_BOX_ID
 
-const DEFAULT_SOURCE_COLOUR = [0, 0, 0, 40]
-const POPULATION_SOURCE_COLOUR = [255, 0, 0, 40]
+const DEFAULT_SOURCE_COLOUR = [255, 255, 255]
+const DEFAULT_TARGET_COLOUR = [255, 255, 255]
 
-const DEFAULT_TARGET_COLOUR = [255, 255, 255, 40]
-const POPULATION_TARGET_COLOUR = [255, 0, 0, 40]
+const POPULATION_SOURCE_COLOUR = [255, 0, 0]
+const POPULATION_TARGET_COLOUR = [255, 0, 0]
+
+const lineColour = (d) => [0, 0, 0]
+const fillColour = (d) => [0, 0, 255]
 
 const getSourceColour = (item) => {
   return (item.Reason === "Population Management") ? POPULATION_SOURCE_COLOUR : DEFAULT_SOURCE_COLOUR
@@ -46,7 +52,8 @@ const defaultProps = {
   // Size of the blob
   tailLength: {
     type: 'number',
-    min: 0, value: 2
+    min: 0, 
+    value: 2
   }
 }
 
@@ -137,15 +144,15 @@ AnimatedArcLayer.layerName = 'AnimatedArcLayer'
 AnimatedArcLayer.defaultProps = defaultProps
 
 //  + Date.now()
-const heatmapLayerColourRange = [
-  [255, 255, 255],
-  [0, 0, 0]
-]
+// const heatmapLayerColourRange = [
+//   [255, 255, 255],
+//   [0, 0, 0]
+// ]
 const zoom = 5.0
 const viewState = {
   longitude: 173.5886324,
   latitude: -41.7409396,
-  pitch: 45,
+  pitch: 0,
   bearing: 0,
   zoom,
   minZoom: zoom,
@@ -157,7 +164,21 @@ const sourcePosition = (d) => {
 }
 const targetPosition = d => d.Transfer_To_Coordinates
 
-function App() {
+const App = () => {
+
+  const [data, setData] = useState()
+
+  const [dataPopManagaed, setDataPopManagaed] = useState()
+
+  useEffect(() => {
+    const dataLoad = async () => {
+      const res = await load(url, JSONLoader)
+      setDataPopManagaed(res.filter((d) => d.Reason === 'Population Management'))
+      setData(res);
+    }
+    dataLoad()
+  }, [])
+
   return (
     <div>
       <DeckGL
@@ -170,25 +191,52 @@ function App() {
         />
         <AnimatedArcLayer
           id='arc-layer'
-          data={url}
-          getWidth={2}
+          data={data}
           getTilt={90}
           getSourcePosition={sourcePosition}
           getTargetPosition={targetPosition}
           getSourceColor={getSourceColour}
           getTargetColor={getTargetColour}
-          getFrequency={1.0}
-          animationSpeed={0.001}
-          tailLength={0.5}
+
+          // a day??
+          getFrequency={3.0}
+          // the time period?
+          animationSpeed={0.0001}
+          tailLength={0.6}
         />
-        <HeatmapLayer
-          id='heatmapLayer'
-          data={url}
+
+
+        <ScatterplotLayer
+          id='ScatterplotLayer2'
+          data={counts}
           pickable={false}
-          radiusPixels={800}
+          opacity={0.1}
+          stroked={true}
+          filled={true}
           getPosition={(d) => d.Transfer_From_Coordinates}
-          colorRange={heatmapLayerColourRange}
+          getFillColor={fillColour()}
+          getLineColor={lineColour}
+          radiusScale={160}
+          radiusMinPixels={1}
+          radiusMaxPixels={1000}
+          getRadius={d => d["transfer-count"] / 10}
         />
+        <ScatterplotLayer
+          id='ScatterplotLayer'
+          data={populationcounts}
+          pickable={false}
+          opacity={1}
+          stroked={true}
+          filled={true}
+          radiusScale={160}
+          radiusMinPixels={1}
+          radiusMaxPixels={1000}
+          getPosition={(d) => d.Transfer_From_Coordinates}
+          getRadius={d => d["count"] / 10}
+          getFillColor={d => [255, 0, 0]}
+          getLineColor={lineColour}
+        />
+
       </DeckGL>
       <InfoPanel />
     </div>
@@ -198,3 +246,4 @@ function App() {
 // preventStyleDiffing
 
 export default App
+
